@@ -29,4 +29,12 @@ public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, I
 	 * @return
 	 */
 	public abstract boolean isExsitsByUniqueCol(Object reqData);
+	
+	/**
+	 * 特定レコード(id)以外で、それぞれのEntityの一意の項目ですでに存在するか確認する
+	 * @param reqData リクエストのdata。各クラスにデシリアライズする
+	 * @param id PK
+	 * @return
+	 */
+	public abstract boolean isExsitsByUniqueColNotEqId(Object reqData, ID id);
 }
