@@ -4,31 +4,29 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import jakarta.persistence.Entity;
+import lombok.RequiredArgsConstructor;
 
-public abstract class ReadAbstractRepository <T , R extends JpaRepository<Entity, Object>>{
+@RequiredArgsConstructor
+public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, ID>> {
 
 	protected R jpaRepository;
 	
-	/**
-	 * 各サービスクラスごとにJpaRepositoryの実装クラスをセットさせる	<br>
-	 * 実装クラスで＠postConstructを付与すること
-	 * @param rep
-	 */
-	protected abstract void setRepository(R rep);
-	
-	protected Entity findById(Long id) {
+	public E findById(ID id) {
 		return jpaRepository.findById(id).orElseThrow();
 	}
 	
-	protected Optional<Entity> findOptById(Long id) {
+	public Optional<E> findOptById(ID id) {
 		return jpaRepository.findById(id);
+	}
+	
+	public boolean isExistsById(ID id) {
+		return this.findOptById(id).isPresent();
 	}
 	
 	/**
 	 * それぞれのEntityの一意の項目ですでに存在するか確認する
-	 * @param id
+	 * @param reqData リクエストのdata。各クラスにデシリアライズする
 	 * @return
 	 */
-	abstract boolean isExsits(Long id);
+	public abstract boolean isExsitsByUniqueCol(Object reqData);
 }
