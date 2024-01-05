@@ -11,18 +11,27 @@ public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, I
 
 	protected R jpaRepository;
 	
+	/** idで検索しEntityを返す */
 	public E findById(ID id) {
 		return jpaRepository.findById(id).orElseThrow();
 	}
 	
+	/** idで検索し、Optinal&lt;Entity&gt;で返す */
 	public Optional<E> findOptById(ID id) {
 		return jpaRepository.findById(id);
 	}
 	
+	/** idのレコードが存在するかチェック */
 	public boolean isExistsById(ID id) {
 		return this.findOptById(id).isPresent();
 	}
 	
+	/**
+	 * idで検索し、存在する時は返す <br>
+	 * {@linkplain ReadAbstractRepository#findOptById(Object)} を使用して、存在チェックする想定
+	 */
+	public abstract E existCheckAndGetById(ID id);
+
 	/**
 	 * それぞれのEntityの一意の項目ですでに存在するか確認する
 	 * @param reqData リクエストのdata。各クラスにデシリアライズする
