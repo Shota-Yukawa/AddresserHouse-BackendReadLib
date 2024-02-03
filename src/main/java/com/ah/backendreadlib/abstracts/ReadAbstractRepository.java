@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, ID>> {
+public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, ID>, T> {
 
 	protected R jpaRepository;
 	
@@ -37,7 +37,7 @@ public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, I
 	 * @param reqData リクエストのdata。各クラスにデシリアライズする
 	 * @return
 	 */
-	public abstract boolean isExsitsByUniqueCol(Object reqData);
+	public abstract boolean isExsitsByUniqueCol(T reqData);
 	
 	/**
 	 * 特定レコード(id)以外で、それぞれのEntityの一意の項目ですでに存在するか確認する
@@ -45,5 +45,5 @@ public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, I
 	 * @param id PK
 	 * @return
 	 */
-	public abstract boolean isExsitsByUniqueColNotEqId(Object reqData, ID id);
+	public abstract boolean isExsitsByUniqueColNotEqId(T reqData, ID id);
 }
