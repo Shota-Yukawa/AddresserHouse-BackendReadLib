@@ -3,6 +3,8 @@ package com.ah.backendreadlib.abstracts;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,4 +48,14 @@ public abstract class ReadAbstractRepository<E, ID, R extends JpaRepository<E, I
 	 * @return
 	 */
 	public abstract boolean isExistsByUniqueColNotEqId(T reqData, ID id);
+	
+	/**
+	 * commit前のentityで、それぞれの一意の項目ですでに存在するか確認する。<br>
+	 * 部分更新等でのT reqBeanが使えない時用<br>
+	 * req.save()前にこのselectが走ると、更新中のトランザクションがコミットされるので、新規トランザクションを貼る
+	 * @param entity
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public abstract boolean isExistsByUniqueColNotEqIdForEntity(E entity);
 }
